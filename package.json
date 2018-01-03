@@ -4,11 +4,11 @@
   "description": "server-side for guestbook app",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "mocha src/* --exit",
     "start": "node src/server",
     "dev": "nodemon src/server"
   },
-  "author": "codebear",
+  "author": "Annie Chiang",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
