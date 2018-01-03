@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const guestSchema = mongoose.Schema ({
-  user_id: {type: String, required: true},
-  event_id: {type: String, required: true},
+  userId: {type: String, required: true},
+  eventId: {type: String, required: true},
   firstName: {type: String, trim: true, required: true},
   lastName: {type: String, trim: true, required: true},
   email: {type: String, trim: true, required: true},
@@ -23,8 +23,8 @@ const guestSchema = mongoose.Schema ({
 guestSchema.methods.toClient = function() {
   return {
     id: this._id,
-    user_id: this.user_id,
-    event_id: this.event_id,
+    userId: this.userId,
+    eventId: this.eventId,
     name: `${this.firstName} ${this.lastName}`,
     email: this.email,
     rsvpStatus: this.rsvpStatus,

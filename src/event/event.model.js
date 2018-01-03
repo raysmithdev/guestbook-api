@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 // import mongoose from 'mongoose';
 
 const eventSchema = mongoose.Schema ({
-  user_id: {type: String, required: true},
+  userId: {type: String, required: true},
   name: {type: String, trim: true, required: true},
   description: {type: String, trim: true},
   startDateTime: {type: Date, required: true},
@@ -18,7 +18,7 @@ const eventSchema = mongoose.Schema ({
 eventSchema.methods.toClient = function() {
   return {
     id: this._id,
-    user_id: this.user_id,
+    userId: this.userId,
     name: this.name,
     description: this.description,
     startDateTime: this.startDateTime,
