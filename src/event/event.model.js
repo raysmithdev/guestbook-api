@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// import mongoose from 'mongoose';
 
 const eventSchema = mongoose.Schema ({
   user_id: {type: String, required: true},
@@ -9,7 +10,6 @@ const eventSchema = mongoose.Schema ({
   locationName: {type: String, required: true},
   locationLink: {type: String, trim: true},
   locationMap: {type: String, trim: true},
-  // event status: 1 = current, 2 = past, 3 = archive (beyond 1 month?)
   eventStatus: {type: Number, required: true, default: 1}, 
   guests_id: {type: String }, // required: true - would this error if host only created event w/o guest?
   createdDate: {type: Date, required: true}, 
@@ -35,3 +35,4 @@ eventSchema.methods.toClient = function() {
 const Event = mongoose.model('Event', eventSchema);
 
 module.exports = { Event };
+// export default Event; 

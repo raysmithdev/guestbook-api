@@ -6,7 +6,6 @@ const guestSchema = mongoose.Schema ({
   firstName: {type: String, trim: true, required: true},
   lastName: {type: String, trim: true, required: true},
   email: {type: String, trim: true, required: true},
-  // 0 = no response, 1 = confirmed, 2 = declined, 3 = tentative
   rsvpStatus: {type: Number,  default: 0}, 
   plusOne: {
     needed: {type: Boolean, default: false},
@@ -45,3 +44,5 @@ guestSchema.virtual('fulllName').get(function() {
 const Guest = mongoose.model('Guest', guestSchema);
 
 module.exports = { Guest };
+
+// export default Guest; 
