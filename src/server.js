@@ -3,11 +3,15 @@ const bodyParser = require('body-parser');
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const passport = require('passport');
+
 const { DATABASE_URL, PORT } = require('./config');
 
 const authRouter = require('./auth/auth.routes');
 const userRouter = require('./user/user.router');
 const eventRouter = require('./event/event.router');
+
+const { jwtStrategy } = require('./auth/auth.strategies');
 
 // create new express app
 const app = express(); 
@@ -34,6 +38,8 @@ app.use(
 // use these middleware for the app
 app.use(morgan('common'));
 app.use(bodyParser.json());
+app.use(passport.initialize());
+passport.use(jwtStrategy);
 
 mongoose.Promise = global.Promise;
 
