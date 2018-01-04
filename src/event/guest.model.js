@@ -8,6 +8,7 @@ const guestSchema = mongoose.Schema ({
   email: {type: String, trim: true, required: true},
   rsvpStatus: {type: Number,  default: 0}, 
   plusOne: {type: Number},
+  notes: {type: String, trim: true},
   // plusOne: {
   //   needed: {type: Boolean, default: false},
   //   number: {type: Number }, //default: 0 ?
@@ -35,6 +36,7 @@ guestSchema.methods.toClient = function() {
     //   number: this.number, //default: 0 ?
     //   name: `${this.plusOne.firstName} ${this.plusOne.lastName}`
     //   },
+    note: this.notes,
     createdDate: {type: Date, required: true}, 
     }
 }
