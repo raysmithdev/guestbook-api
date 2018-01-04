@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const { DATABASE_URL, PORT } = require('./config');
 
 const userRouter = require('./user/user.router');
+const eventRouter = require('./event/event.router');
 
 // create new express app
 const app = express(); 
@@ -37,6 +38,7 @@ mongoose.Promise = global.Promise;
 
 // establish routes 
 app.use('/api/users', userRouter);
+app.use('/api/events', eventRouter); //should this include user in the path? 
 
 let server; 
 
