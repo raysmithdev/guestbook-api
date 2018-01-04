@@ -9,7 +9,7 @@ function createOne() {
 
 function createMany(num) {
   let users = [];
-  for (let i = 0; i < num, i++) {
+  for (let i = 0; i < num; i++) {
     users.push(createOne());
   }
   return users;

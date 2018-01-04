@@ -9,7 +9,8 @@ function createOne(userId) {
     endDateTime: faker.date.future(),
     locationName: faker.hacker.noun(),
     locationAddress: faker.address.streetAddress(),
-    eventStatus: 1
+    eventStatus: 1,
+    createdDate: new Date()
   }
 }
 
