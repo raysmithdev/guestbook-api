@@ -2,11 +2,11 @@ const { Event } = require('./event.model');
 const { Guest } = require('./guest.model');
 const { eventStatus, guestStatus } = require('./status.enum');
 
-// find by user id 
-const userId = req.params.userId;
-
 // GET ALL EXISTING EVENTS 
 const findExistingEvents = (req, res) => {
+  // find by user id 
+  const userId = req.params.userId;
+
   Event.find({ userId: userId })
     .then(events => {
       res.json({
@@ -23,6 +23,9 @@ const findExistingEvents = (req, res) => {
 
 // GET ALL ACTIVE EVENTS 
 const findActiveEvents = (req, res) => {
+  // find by user id 
+  const userId = req.params.userId;
+  
   Event.find({ userId: userId, status: 1})
     .then(events => {
       res.json({
@@ -39,6 +42,9 @@ const findActiveEvents = (req, res) => {
 
 // GET ALL PAST EVENTS
 const findPastEvents = (req, res) => {
+  // find by user id 
+  const userId = req.params.userId;
+
   Event.find({ userId: userId, status: 2})
     .then(events => {
       res.json({
@@ -55,6 +61,9 @@ const findPastEvents = (req, res) => {
 
 // GET ALL ARCHIVED EVENTS 
 const findArchivedEvents = (req, res) => {
+  // find by user id 
+  const userId = req.params.userId;
+  
   Event.find({ userId: userId, status: 3})
     .then(events => {
       res.json({
@@ -87,5 +96,7 @@ const findArchivedEvents = (req, res) => {
 
 module.exports = {
   findExistingEvents,
-  findPastEvents
+  findActiveEvents,
+  findPastEvents,
+  findArchivedEvents
 }
