@@ -8,7 +8,7 @@ router.use(bodyParser.json());
 
 // GET ALL EVENTS FROM USER 
 router.get(
-  '/',
+  '/',  // should this be more specific? 
   passport.authenticate('jwt', { session: false }),
   controller.findExistingEvents
 );
