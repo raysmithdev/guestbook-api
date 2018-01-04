@@ -38,7 +38,7 @@ const findActiveEvents = (req, res) => {
         message: 'internal server error'
       });
     });
-}
+};
 
 // GET ALL PAST EVENTS
 const findPastEvents = (req, res) => {
@@ -57,7 +57,7 @@ const findPastEvents = (req, res) => {
         message: 'internal server error'
       });
     });
-}
+};
 
 // GET ALL ARCHIVED EVENTS 
 const findArchivedEvents = (req, res) => {
@@ -76,7 +76,7 @@ const findArchivedEvents = (req, res) => {
         message: 'internal server error'
       });
     });
-}
+};
 
 // CREATE EVENT 
 const createNewEvent = (req, res) => {
@@ -115,14 +115,35 @@ const createNewEvent = (req, res) => {
         message: 'internal server error'
       });
     });
-}
-// MODIFY EVENT DETAILS 
-// name, date, time, location, etc
+};
+
+// MODIFY EVENT DETAILS (name, date, time, location, etc)
+const modifyEventDetails = (req, res) => {
+  const eventId = req.params.eventId;
+  const updated = {};
+  const updateableFields = ['name', 'description', 'startDateTime', 'endDateTime',
+    'locationName', 'locationAddress', 'locationLink', 'locationMap'];
+  
+    updateableFields.forEach(field => {
+      if(field in req.body) {
+        updated[field] = req.body[field];
+      }
+    });
+
+  Event.findByIdAndUpdate(eventId, {$set: updated}, {new: true}) // {$set: updated}?
+    .then(updatedEvent => res.status(204).end())
+    .catch(err =>
+      res.status(500).json({
+        message: `event couldn't be updated`
+      })
+    );
+};
 
 module.exports = {
   createNewEvent,
   findExistingEvents,
   findActiveEvents,
   findPastEvents,
-  findArchivedEvents
+  findArchivedEvents,
+  modifyEventDetails
 }
