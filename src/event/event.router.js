@@ -29,9 +29,20 @@ router.get(
 
 // GET ALL ARCHIVED EVENTS FROM USER
 router.get(
-  '/arhived',
-    //passport.authenticate('jwt, { session: false }),
+  '/archived',
+  //passport.authenticate('jwt, { session: false }),
   controller.findArchivedEvents
 )
 
+// CREATE NEW EVENT
+router.post(
+  '/',
+  //passport.authenticate('jwt, { session: false }),
+  controller.createNewEvent
+)
+
+// PUT - send an array of guest objects
+// first last name email
+// array of 3 properties
+// save onto the event property
 module.exports = router; 

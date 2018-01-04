@@ -79,22 +79,48 @@ const findArchivedEvents = (req, res) => {
 }
 
 // CREATE EVENT 
+const createNewEvent = (req, res) => {
+  
+  const requiredFields = ['name', 'startDateTime', 'locationName'];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
 
+    // how to send this error to client? 
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  Event.create({
+    userId: req.params.userId, // how to capture this? 
+    name: req.body.name,
+    description: req.body.description,
+    startDateTime: req.body.startDateTime, 
+    endDateTime: req.body.endDateTime, 
+    locationName: req.body.locationName,
+    locationAddress: req.body.locationAddress,
+    locationLink: req.body.locationLink,
+    locationMap: req.body.locationMap,
+    // guestIds - how to handle guests?
+    createdDate: new Date()
+  })
+    .then(event => {
+      res.status(201).json(event.toClient());
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        message: 'internal server error'
+      });
+    });
+}
 // MODIFY EVENT DETAILS 
-// name, date, time, location, 
-
-// GET ALL EXISTING GUESTS 
-
-// ADD GUESTS
-
-// REMOVE GUESTS 
-
-// MODIFY GUESTS 
-
-// RSVP status - if still status of 0 or 3, 7 days prior, send reminder email
-// RSVP status - if status of 1, send reminder email 2 days prior ot event 
+// name, date, time, location, etc
 
 module.exports = {
+  createNewEvent,
   findExistingEvents,
   findActiveEvents,
   findPastEvents,
