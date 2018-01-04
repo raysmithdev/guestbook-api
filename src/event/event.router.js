@@ -41,6 +41,13 @@ router.post(
   controller.createNewEvent
 )
 
+// MODIFY EXISTING EVENT
+router.put(
+  '/:eventId',
+  //passport.authenticate('jwt, { session: false }),
+  controller.modifyEventDetails
+)
+
 // PUT - send an array of guest objects
 // first last name email
 // array of 3 properties
