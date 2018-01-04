@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 
 const { User } = require("../user/user.model");
-const config = require("../../config");
+const config = require("../config");
 const router = express.Router();
 
 router.use(bodyParser.json());
@@ -26,7 +26,7 @@ router.post("/signup", async (req, res) => {
   const hashedPassword = await User.hashPassword(password);
 
   const existingUser = await User.findOne({
-    userName
+    email
   });
 
   if (existingUser) {
@@ -45,7 +45,7 @@ router.post("/signup", async (req, res) => {
   })
 });
 
-//check if username and password match
+//check if email and password match
 router.post("/login", (req, res) => {
   const email = req.body.email;
   const userPassword = req.body.password;
@@ -54,7 +54,7 @@ router.post("/login", (req, res) => {
       if (!user) {
         return Promise.reject({
           reason: "LoginError",
-          message: "Incorrect username or password"
+          message: "Incorrect email or password"
         });
       }
       return {
@@ -67,7 +67,7 @@ router.post("/login", (req, res) => {
       if (!result.isValid) {
         return Promise.reject({
           reason: "LoginError",
-          message: "Incorrect username or password"
+          message: "Incorrect email or password"
         });
       }
       //if password correct, create auth token
