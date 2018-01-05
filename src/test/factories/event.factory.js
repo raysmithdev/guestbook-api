@@ -3,8 +3,8 @@ const faker = require('faker');
 function createOne(userId) {
   return {
     userId: userId,
-    name: faker.hacker.phrase(),
-    description: faker.company.catchPhraseDescriptor(),
+    name: faker.company.catchPhraseDescriptor(),
+    description: faker.hacker.phrase(),
     startDateTime: faker.date.future(),
     endDateTime: faker.date.future(),
     locationName: faker.hacker.noun(),

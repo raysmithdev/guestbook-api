@@ -42,7 +42,12 @@ const createAuthToken = user => {
 function createTestUser() {
   console.info('creating test user');
   const testUser = userFactory.createOne();
-  return User.create(testUser);
+  // make new promise to wrap up the whole thing
+  // to resolve the then part
+  return User.create(testUser)
+    // .then(user => {
+    //   userId = user._id;
+    // });
 }
 
 // create random events
@@ -63,8 +68,8 @@ describe('events API', function() {
 
   beforeEach(async function() {
     testUser = await createTestUser();
-    // console.log('test user->', testUser);
-    // console.log('test user id->', testUser._id);
+    console.log('test user->', testUser);
+    console.log('test user id->', testUser._id);
     mockJwt = createAuthToken(testUser);
     // console.log('mockJwt ->', mockJwt);
     return seedEventData(testUser._id);
@@ -83,22 +88,26 @@ describe('events API', function() {
   // GET endpoint
   describe('GET endpoint', function() {
     const expectedKeys = [
-      'id', 'userId', 'name', 'description', 'startDateTime',
+      'name', 'description', 'startDateTime',
       'locationName', 'locationAddress'
     ]
 
     it('return all existing events', function() {
-      // console.log('test user in GET endpoint? ->', testUser);
-
+      // Event.find()
+      //   .then(events => {
+      //     console.log('events find at first case ->', events);
+      //   })
       let res;
       return chai
         .request(app)
+        //is this getting parsed correctly?
         .get(`/api/user/${testUser._id}/events`) 
         .set('Authorization', `Bearer ${mockJwt}`)
         .then(_res => {
           res = _res;
           // console.log('get res? ->', res);
           res.should.have.status(200);
+          console.log('res body -> ', res.body.events);
           res.body.events.should.have.lengthOf.at.least(1);
           return Event.count();
         })
@@ -114,9 +123,12 @@ describe('events API', function() {
         .get(`/api/user/${testUser._id}/events`) 
         .set('Authorization', `Bearer ${mockJwt}`)
         .then(function(res) {
+          // console.log('return keys, check res ->', res);
+          // console.log('return expected keys ->', resEvent);
           res.should.have.status(200);
           res.should.be.json;
           res.body.events.should.be.a('array');
+          // console.log('res body -> ', res.body.events);
           res.body.events.should.have.lengthOf.at.least(1);
 
           // check each response for expected keys
@@ -138,11 +150,11 @@ describe('events API', function() {
           resEvent.startEndTime.should.equal(event.startEndTime);
         });
     });
-  
+  });
   // POST endpoint
   describe('POST endpoint', function() {
     const expectedKeys = [
-      'id', 'userId', 'name', 'description', 'startDateTime',
+      'name', 'description', 'startDateTime',
       'locationName', 'locationAddress'
     ];
 
@@ -166,7 +178,6 @@ describe('events API', function() {
           res.body.id.should.not.be.null;
         });
     });
-  })
   })
 })
 

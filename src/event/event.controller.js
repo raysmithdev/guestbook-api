@@ -1,12 +1,13 @@
 const { Event } = require('./event.model');
 const { Guest } = require('./guest.model');
 const { eventStatus, guestStatus } = require('./status.enum');
+// const { ObjectId } = require('mongodb');
 
 // GET ALL EXISTING EVENTS 
 const findExistingEvents = (req, res) => {
   // find by user id 
   const userId = req.params.userId;
-
+  console.log('GET endpoint - userId ->', userId);
   Event.find({ userId: userId })
     .then(events => {
       res.json({
