@@ -38,6 +38,9 @@ app.use(
 // use these middleware for the app
 app.use(morgan('common'));
 app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.text());                                    
+// app.use(bodyParser.json({ type: 'application/json'}));
 app.use(passport.initialize());
 passport.use(jwtStrategy);
 
