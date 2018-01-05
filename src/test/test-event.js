@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 // const faker = require('faker');
 
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise; 
 
 const { app, runServer, closeServer } = require('../server');
 const { JWT_EXPIRY, JWT_SECRET, TEST_DATABASE_URL } = require('../config');
@@ -14,19 +15,21 @@ const { Guest } = require('../event/guest.model');
 const { User } = require('../user/user.model');
 
 const eventFactory = require('../test/factories/event.factory');
-const userFactory = require('../test/factories/user.factory.js');
+const userFactory = require('../test/factories/user.factory');
 
 chai.use(chatiHttp);
 
 // delete entire database
 function tearDownDb() {
-  return new Promise((resolve, reject) => {
-    console.warn('deleting test database');
-    mongoose.connection
-      .dropDatabase()
-      .then(result => resolve(result))
-      .catch(err => reject(err));
-  });
+  console.warn('deleting test database');
+  return mongoose.connection
+    .collections['events'].deleteMany({}) //this returns a promise
+    // .dropDatabase()
+    .then(() => 
+    // without {} means it auto returns; only 1 line statement
+      mongoose.connection
+      .collections['users'].deleteMany({})
+    )
 }
 
 // auth token for test user
@@ -66,6 +69,16 @@ describe('events API', function() {
     return runServer(TEST_DATABASE_URL);
   });
 
+  // beforeEach(function() {
+  //   return createTestUser()
+  //     .then(_testUser => {
+  //       testUser = _testUser;
+  //       mockJwt = createAuthToken(testUser)
+  //       console.log('test user->', testUser);
+  //       console.log('test user id->', testUser._id);
+  //       return seedEventData(testUser._id)
+  //     })
+  // });
   beforeEach(async function() {
     testUser = await createTestUser();
     console.log('test user->', testUser);
@@ -93,10 +106,10 @@ describe('events API', function() {
     ]
 
     it('return all existing events', function() {
-      // Event.find()
-      //   .then(events => {
-      //     console.log('events find at first case ->', events);
-      //   })
+      Event.find()
+        .then(events => {
+          console.log('events find at first case ->', events);
+        })
       let res;
       return chai
         .request(app)
@@ -105,9 +118,8 @@ describe('events API', function() {
         .set('Authorization', `Bearer ${mockJwt}`)
         .then(_res => {
           res = _res;
-          // console.log('get res? ->', res);
           res.should.have.status(200);
-          console.log('res body -> ', res.body.events);
+          console.log('res? -> ', res);
           res.body.events.should.have.lengthOf.at.least(1);
           return Event.count();
         })
@@ -117,6 +129,10 @@ describe('events API', function() {
     });
 
     it('events should return with expected keys', function() {
+      Event.find()
+      .then(events => {
+        console.log('events find at second case ->', events);
+      })
       let resEvent;
       return chai
         .request(app)
@@ -159,7 +175,8 @@ describe('events API', function() {
     ];
 
     it('create a new event', function() {
-      const newEvent = eventFactory.createOne();
+      const newEvent = eventFactory.createOne(testUser._id);
+      console.log('create new event->', newEvent);
       return chai
         .request(app)
         .post(`/api/user/${testUser._id}/events`)
