@@ -7,11 +7,13 @@ const { eventStatus, guestStatus } = require('./status.enum');
 const findExistingEvents = (req, res) => {
   // find by user id 
   const userId = req.params.userId;
+  // console.log('request? ->', req);
   console.log('GET endpoint - userId ->', userId);
   Event.find({ userId: userId })
     .then(events => {
-      res.json({
-        events: events.map(events => events.toClient())
+      // want to explicitly see the status returned
+      return res.status(200).json({
+        events: events.map(e => e.toClient())
       });
     })
     .catch(err => {
@@ -29,8 +31,8 @@ const findActiveEvents = (req, res) => {
   
   Event.find({ userId: userId, status: 1})
     .then(events => {
-      res.json({
-        events: events.map(events => events.toClient())
+      return res.status(200).json({
+        events: events.map(e => e.toClient())
       });
     })
     .catch(err => {
@@ -48,8 +50,8 @@ const findPastEvents = (req, res) => {
 
   Event.find({ userId: userId, status: 2})
     .then(events => {
-      res.json({
-        events: events.map(events => events.toClient())
+      return res.status(200).json({
+        events: events.map(e => e.toClient())
       });
     })
     .catch(err => {
@@ -67,8 +69,8 @@ const findArchivedEvents = (req, res) => {
   
   Event.find({ userId: userId, status: 3})
     .then(events => {
-      res.json({
-        events: events.map(events => events.toClient())
+      return res.status(200).json({
+        events: events.map(e => e.toClient())
       });
     })
     .catch(err => {
