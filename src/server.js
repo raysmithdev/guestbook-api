@@ -45,7 +45,7 @@ mongoose.Promise = global.Promise;
 
 // establish routes 
 // app.use('/api/users', userRouter); 
-app.use('/api/user/:userId/events', eventRouter); //should this include user in the path? 
+app.use('/api/user/:userId/events', eventRouter); 
 app.use('/api/auth', authRouter);
 
 let server; 

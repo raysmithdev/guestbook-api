@@ -1,3 +1,4 @@
+// require("babel-polyfill");
 const chai = require('chai');
 const chatiHttp = require('chai-http');
 const should = chai.should();
@@ -62,10 +63,10 @@ describe('events API', function() {
 
   beforeEach(async function() {
     testUser = await createTestUser();
-    console.log('test user->', testUser);
-    console.log('test user id->', testUser._id);
+    // console.log('test user->', testUser);
+    // console.log('test user id->', testUser._id);
     mockJwt = createAuthToken(testUser);
-    console.log('mockJwt ->', mockJwt);
+    // console.log('mockJwt ->', mockJwt);
     return seedEventData(testUser._id);
   });
 
@@ -87,16 +88,18 @@ describe('events API', function() {
     ]
 
     it('return all existing events', function() {
+      // console.log('test user in GET endpoint? ->', testUser);
+
       let res;
       return chai
         .request(app)
-        .get(`/api/users/${testUser._id}/events`) 
+        .get(`/api/user/${testUser._id}/events`) 
         .set('Authorization', `Bearer ${mockJwt}`)
         .then(_res => {
           res = _res;
-          console.log('get res? ->', res);
+          // console.log('get res? ->', res);
           res.should.have.status(200);
-          res.body.trackers.should.have.lengthOf.at.least(1);
+          res.body.events.should.have.lengthOf.at.least(1);
           return Event.count();
         })
         .then(count => {
@@ -108,7 +111,7 @@ describe('events API', function() {
       let resEvent;
       return chai
         .request(app)
-        .get(`/api/users/${testUser._id}/events`) 
+        .get(`/api/user/${testUser._id}/events`) 
         .set('Authorization', `Bearer ${mockJwt}`)
         .then(function(res) {
           res.should.have.status(200);
@@ -147,7 +150,7 @@ describe('events API', function() {
       const newEvent = eventFactory.createOne();
       return chai
         .request(app)
-        .post(`/api/users/${testUser._id}/events`)
+        .post(`/api/user/${testUser._id}/events`)
         .set('Authorization', `Bearer ${mockJwt}`)
         .send(newEvent)
         .then(function(res) {
