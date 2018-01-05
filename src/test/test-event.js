@@ -119,13 +119,10 @@ describe('events API', function() {
         .then(_res => {
           res = _res;
           res.should.have.status(200);
-          console.log('res? -> ', res);
+          // console.log('res? -> ', res);
           res.body.events.should.have.lengthOf.at.least(1);
-          return Event.count();
+          res.body.events.count.should.equal.to(5)
         })
-        .then(count => {
-          res.body.events.should.have.lengthOf(count);
-        });
     });
 
     it('events should return with expected keys', function() {
