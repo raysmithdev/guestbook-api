@@ -42,12 +42,8 @@ const createAuthToken = user => {
 function createTestUser() {
   console.info('creating test user');
   const testUser = userFactory.createOne();
-  // make new promise to wrap up the whole thing
-  // to resolve the then part
   return User.create(testUser)
-    // .then(user => {
-    //   userId = user._id;
-    // });
+
 }
 
 // create random events
@@ -68,8 +64,8 @@ describe('events API', function() {
 
   beforeEach(async function() {
     testUser = await createTestUser();
-    console.log('test user->', testUser);
-    console.log('test user id->', testUser._id);
+    // console.log('test user->', testUser);
+    // console.log('test user id->', testUser._id);
     mockJwt = createAuthToken(testUser);
     // console.log('mockJwt ->', mockJwt);
     return seedEventData(testUser._id);
@@ -92,30 +88,28 @@ describe('events API', function() {
       'locationName', 'locationAddress'
     ]
     it('return all existing events', function() {
-      Event.find()
-        .then(events => {
-          console.log('events find at first case ->', events);
-        })
-      let res;
+      // Event.find()
+      //   .then(events => {
+      //     console.log('events find at first case ->', events);
+      //   })
+      // let res;
       
       chai
         .request(app)
-        //is this getting parsed correctly?
         .get(`/api/user/${testUser._id}/events`) 
         .set('Authorization', `Bearer ${mockJwt}`)
         .then(_res => {
           res = _res;
           res.should.have.status(200);
-          // console.log('res? -> ', res);
           res.body.events.should.have.lengthOf.at.least(1);
           res.body.events.count.should.equal.to(5)
         })
     });
     it('events should return with expected keys', function() {
-      Event.find()
-      .then(events => {
-        console.log('events find at second case ->', events);
-      })
+      // Event.find()
+      // .then(events => {
+      //   console.log('events find at second case ->', events);
+      // })
       let resEvent;
       
       chai
@@ -160,7 +154,7 @@ describe('events API', function() {
 
     it('create a new event', function() {
       const newEvent = eventFactory.createOne(testUser._id);
-      console.log('create new event->', newEvent);
+      // console.log('create new event->', newEvent);
       
       chai
         .request(app)
@@ -168,12 +162,12 @@ describe('events API', function() {
         .set('Authorization', `Bearer ${mockJwt}`)
         .send(newEvent)
         .then(function(res) {
-          console.log('send body event ->', res.body);
+          // console.log('send body event ->', res.body);
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.a('object');
           res.body.should.include.keys(expectedKeys);
-          res.body.name.shold.equal(newEvent.name);
+          res.body.name.should.equal(newEvent.name);
           res.body.description.should.equal(newEvent.description);
           res.body.locationName.should.equal(newEvent.locationName);
           res.body.locationAddress.should.equal(newEvent.locationAddress);
