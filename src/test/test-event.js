@@ -1,12 +1,9 @@
-// require("babel-polyfill");
 const chai = require('chai');
 const chatiHttp = require('chai-http');
 const should = chai.should();
 const jwt = require('jsonwebtoken');
-// const faker = require('faker');
 
 const mongoose = require('mongoose');
-mongoose.Promise = global.Promise; 
 
 const { app, runServer, closeServer } = require('../server');
 const { JWT_EXPIRY, JWT_SECRET, TEST_DATABASE_URL } = require('../config');
@@ -69,16 +66,6 @@ describe('events API', function() {
     return runServer(TEST_DATABASE_URL);
   });
 
-  // beforeEach(function() {
-  //   return createTestUser()
-  //     .then(_testUser => {
-  //       testUser = _testUser;
-  //       mockJwt = createAuthToken(testUser)
-  //       console.log('test user->', testUser);
-  //       console.log('test user id->', testUser._id);
-  //       return seedEventData(testUser._id)
-  //     })
-  // });
   beforeEach(async function() {
     testUser = await createTestUser();
     console.log('test user->', testUser);
@@ -104,14 +91,14 @@ describe('events API', function() {
       'name', 'description', 'startDateTime',
       'locationName', 'locationAddress'
     ]
-
     it('return all existing events', function() {
       Event.find()
         .then(events => {
           console.log('events find at first case ->', events);
         })
       let res;
-      return chai
+      
+      chai
         .request(app)
         //is this getting parsed correctly?
         .get(`/api/user/${testUser._id}/events`) 
@@ -124,14 +111,14 @@ describe('events API', function() {
           res.body.events.count.should.equal.to(5)
         })
     });
-
     it('events should return with expected keys', function() {
       Event.find()
       .then(events => {
         console.log('events find at second case ->', events);
       })
       let resEvent;
-      return chai
+      
+      chai
         .request(app)
         .get(`/api/user/${testUser._id}/events`) 
         .set('Authorization', `Bearer ${mockJwt}`)
@@ -174,12 +161,14 @@ describe('events API', function() {
     it('create a new event', function() {
       const newEvent = eventFactory.createOne(testUser._id);
       console.log('create new event->', newEvent);
-      return chai
+      
+      chai
         .request(app)
         .post(`/api/user/${testUser._id}/events`)
         .set('Authorization', `Bearer ${mockJwt}`)
         .send(newEvent)
         .then(function(res) {
+          console.log('send body event ->', res.body);
           res.should.have.status(201);
           res.should.be.json;
           res.body.should.be.a('object');
