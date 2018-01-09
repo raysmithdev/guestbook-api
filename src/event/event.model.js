@@ -26,7 +26,7 @@ eventSchema.methods.toClient = function() {
     startDateTime: this.startDateTime,
     endDateTime: this.endDateTime,
     locationName: this.locationName,
-    locationAddress: this.locationMap,
+    locationAddress: this.locationAddress,
     locationLink: this.locationLink,
     locationMap: this.locationMap,
     eventStatus: this.eventStatus, 
