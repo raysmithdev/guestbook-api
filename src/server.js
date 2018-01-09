@@ -48,7 +48,8 @@ mongoose.Promise = global.Promise;
 
 // establish routes 
 // app.use('/api/users', userRouter); 
-app.use('/api/user/:userId/events', eventRouter); 
+// this is the base URL to manage
+app.use('/api/events', eventRouter); 
 app.use('/api/auth', authRouter);
 
 let server; 
